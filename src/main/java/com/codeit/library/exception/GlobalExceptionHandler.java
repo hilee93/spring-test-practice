@@ -4,9 +4,11 @@ import com.codeit.library.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -65,8 +67,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleException(HttpMediaTypeNotSupportedException e) {
+        ErrorResponse error = new ErrorResponse("HTTP_MEDIA_TYPE_NOT_SUPPORTED_EXCEPTION", "서버 오류가 발생했습니다");
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        e.printStackTrace();
         ErrorResponse error = new ErrorResponse("INTERNAL_ERROR", "서버 오류가 발생했습니다");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
