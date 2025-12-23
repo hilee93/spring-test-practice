@@ -6,7 +6,6 @@ import com.codeit.library.domain.Member;
 import com.codeit.library.dto.request.LoanCreateRequest;
 import com.codeit.library.dto.response.LoanResponse;
 import com.codeit.library.exception.LoanLimitExceededException;
-import com.codeit.library.exception.LoanNotFoundException;
 import com.codeit.library.exception.MemberNotFoundException;
 import com.codeit.library.repository.BookRepository;
 import com.codeit.library.repository.LoanRepository;

@@ -3,10 +3,11 @@ spring:
     name: library-management
   
   datasource:
-    url: jdbc:h2:mem:librarydb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+#    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://myapp-postgres-db.c3iksg6seeva.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: ${DB_PASSWORD}
   
   h2:
     console:
@@ -27,6 +28,33 @@ spring:
     init:
       mode: always
 
+  cloud:
+    aws:
+      credentials:
+        accessKey: ${AWS_S3_ACCESS_KEY}
+        secretKey: ${AWS_S3_SECRET_KEY}
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: s3-bucket-practice2002
+
 server:
   port: 8080
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+  # 환경변수로 외부에서 주입 받음.
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
